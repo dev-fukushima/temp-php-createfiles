@@ -1,0 +1,3 @@
+item_main_src,item_name,item_text,item_price,item_link,path
+/img/imn01.jpg,ストレッチパンツ,しっかり伸びるストレッチパンツ,4000,http://google.com,output/test1.html
+/img/imn02.jpg,デニムパンツ,濃紺デニムパンツ,5000,http://google.com,output/test2.html
