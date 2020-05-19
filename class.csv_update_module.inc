@@ -18,6 +18,7 @@ class CSV_UPDATE_MODULE{
    }
    //CSVファイルを強制的に読み込む
  public static function force_load_csv(){
+   ini_set('auto_detect_line_endings',true);
    self::$csv = new SplFileObject(self::$path);
    self::$csv->setFlags(SplFileObject::READ_CSV);
    foreach (self::$csv as $key => $line) {
@@ -49,6 +50,14 @@ class CSV_UPDATE_MODULE{
      echo 'テンプレートが存在しません。';
    }
  }
+ //更新時のテンプレート用HTMLをセット
+ public static function echo_template_html(){
+   if(self::$template):
+   echo self::$template;
+    else:
+   echo 'テンプレートが設定されておりません';
+   endif;
+ }
  //テンプレートから強制的にHTMLを作成する
  public static function force_create_html(){
    $item_name = array();
@@ -62,7 +71,9 @@ class CSV_UPDATE_MODULE{
        }else{
          $tmp_file = preg_replace('/\$\{'.$line_key.'\}/',$line_item,$tmp_file);
        }
+
      }
+
      if($key != 0){
        $put_files = array();
        $put_files['html'] = $tmp_file;
@@ -70,16 +81,20 @@ class CSV_UPDATE_MODULE{
        $temp_files[] = $put_files;
      }
    }
+
    foreach($temp_files as $putfile){
      if(!file_exists(dirname(__FILE__).'/' .$putfile['path'])){
        $dirpath_tmp = explode('/',$putfile['path']);
        array_pop($dirpath_tmp);
        $dirpath = implode('/',$dirpath_tmp);
-       mkdir(dirname(__FILE__).'/' .$dirpath);
+       if(!file_exists(dirname(__FILE__).'/' .$dirpath)){
+        mkdir(dirname(__FILE__).'/' .$dirpath);
+       }
      }
      file_put_contents(dirname(__FILE__).'/' .$putfile['path'],$putfile['html']);
    }
  }
+<<<<<<< HEAD
  //テンプレートから強制的に一つのHTMLに結合する
  public static function force_create_listHtml(){
    $item_name = array();
@@ -113,6 +128,11 @@ class CSV_UPDATE_MODULE{
      $tmp_output_file .= "\n" . $putfile['html'];
    }
    file_put_contents(dirname(__FILE__).'/' .'marge.html',$tmp_output_file);
+=======
+ //テスト表示
+ public static function test_echo($str){
+   echo 'include ' . $str . " ok\n";
+>>>>>>> 63a1e1e6b4181bac520e581e15cd0d6cc0f2c76c
  }
 }
 ?>
