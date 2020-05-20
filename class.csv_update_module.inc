@@ -94,7 +94,7 @@ class CSV_UPDATE_MODULE{
      file_put_contents(dirname(__FILE__).'/' .$putfile['path'],$putfile['html']);
    }
  }
-<<<<<<< HEAD
+
  //テンプレートから強制的に一つのHTMLに結合する
  public static function force_create_listHtml(){
    $item_name = array();
@@ -119,20 +119,16 @@ class CSV_UPDATE_MODULE{
    }
 
    foreach($temp_files as $putfile){
-     if(!file_exists(dirname(__FILE__).'/' .$putfile['path'])){
-       $dirpath_tmp = explode('/',$putfile['path']);
-       array_pop($dirpath_tmp);
-       $dirpath = implode('/',$dirpath_tmp);
-       mkdir(dirname(__FILE__).'/' .$dirpath);
+     if(!file_exists(dirname(__FILE__) . '/output')){
+       mkdir(dirname(__FILE__).'/output');
      }
-     $tmp_output_file .= "\n" . $putfile['html'];
+     $tmp_output_file .= $putfile['html'];
    }
-   file_put_contents(dirname(__FILE__).'/' .'marge.html',$tmp_output_file);
-=======
+   file_put_contents(dirname(__FILE__).'/output/' .'list.html',$tmp_output_file);
+ }
  //テスト表示
  public static function test_echo($str){
    echo 'include ' . $str . " ok\n";
->>>>>>> 63a1e1e6b4181bac520e581e15cd0d6cc0f2c76c
  }
 }
 ?>
