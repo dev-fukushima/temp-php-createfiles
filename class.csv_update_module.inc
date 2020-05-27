@@ -58,7 +58,12 @@ class CSV_UPDATE_MODULE{
    echo 'テンプレートが設定されておりません';
    endif;
  }
- //テンプレートから強制的にHTMLを作成する
+ //テンプレートから強制的に複数のHTMLを作成する
+ /*
+CSVの項目は
+html と　path を入れなければならない
+| str1 | str2 | str3 | html(出力ファイル名) | path（出力パス）|
+ */
  public static function force_create_html(){
    $item_name = array();
    $temp_files = array();
@@ -96,6 +101,10 @@ class CSV_UPDATE_MODULE{
  }
 
  //テンプレートから強制的に一つのHTMLに結合する
+/*
+| ${str1} | ${str1} | ${str1} |
+*/
+
  public static function force_create_listHtml(){
    $item_name = array();
    $temp_files = array();
@@ -125,6 +134,36 @@ class CSV_UPDATE_MODULE{
      $tmp_output_file .= $putfile['html'];
    }
    file_put_contents(dirname(__FILE__).'/output/' .'list.html',$tmp_output_file);
+ }
+
+ //テンプレート内の文字列をCSVで一気に置換える
+ //replace.htmlを読み込んで、
+ //1列目の文字を2列目の文字に置換える
+ //replace/replaced.htmlに結果を出力
+ //フィールドは不要
+ public static function replace_html(){
+   $tmp_file = self::$template;
+   $count = 0;//CSV列カウンター　2列目までのみ使う
+   foreach (self::$records as $key => $item) {
+     $count = 0;
+     foreach($item as $line_key => $line_item){
+         if($count <= 1):
+           //1列目を置き換え前の文字とする
+           if($count == 0){
+             $rep_target = $line_item;
+           }else{
+             //2列目の文字に置換える
+             $tmp_file = preg_replace('#'. $rep_target .'#',$line_item,$tmp_file);
+           }
+         endif;
+       $count ++;
+     }
+   }
+
+   if(!file_exists(dirname(__FILE__) . '/replace')){
+     mkdir(dirname(__FILE__).'/replace');
+   }
+   file_put_contents(dirname(__FILE__).'/replace/' .'replaced.html',$tmp_file);
  }
  //テスト表示
  public static function test_echo($str){
